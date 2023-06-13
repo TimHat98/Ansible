@@ -9,13 +9,15 @@
         owner: root
         group: root
         mode: '0644'
+
     - name: Slurp
       ansible.builtin.slurp:
         src: /tmp/tmp.txt
       register: tmp
+
     - name: Debug txt
       ansible.builtin.debug:
         msg:
-        - "{{ ansible_os_family }}"
-        - "{{ tmp['content'] | b64decode}}"
+          - "{{ ansible_os_family }}"
+          - "{{ tmp['content'] | b64decode}}"
   tags: debug
