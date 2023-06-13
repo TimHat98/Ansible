@@ -1,0 +1,21 @@
+---
+# tasks file for debug
+- name: Debug
+  block:
+    - name: Copy and debug
+      ansible.builtin.template:
+        src: templates/tmp.txt.j2
+        dest: /tmp/tmp.txt
+        owner: root
+        group: root
+        mode: '0644'
+    - name: Slurp
+      ansible.builtin.slurp:
+        src: /tmp/tmp.txt
+      register: tmp
+    - name: Debug txt
+      ansible.builtin.debug:
+        msg:
+        - "{{ ansible_os_family }}"
+        - "{{ tmp['content'] | b64decode}}"
+  tags: debug

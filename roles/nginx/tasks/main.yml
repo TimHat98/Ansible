@@ -1,0 +1,31 @@
+---
+- name: Install nginx on CentOS
+  when: ansible_os_family == "RedHat"
+  block:
+    - name: Install packages on CentOS
+      package:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - "epel-release"
+        - "nginx"
+
+- name: Install nginx on Altlinux
+  when: ansible_os_family == "Altlinux"
+  block:
+    - name: Install nginx
+      apt_rpm:
+        name: nginx
+        state: present
+        update_cache: true
+      tags: altlinux
+
+- name: Copy config
+  ansible.builtin.template:
+    src: templates/nginx.conf.j2
+    dest: /etc/nginx/nginx.conf
+    owner: root
+    group: root
+    mode: '0644'
+  notify: Restart Nginx
+  tags: сonfig
