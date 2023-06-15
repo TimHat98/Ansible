@@ -1,0 +1,8 @@
+---
+- name: Wait_for_connection
+  hosts: "all"
+  gather_facts: true
+  become: true
+
+  roles:
+    - role: Wait_for_connection

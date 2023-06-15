@@ -1,0 +1,34 @@
+---
+- name: Wait for connection
+  wait_for_connection:
+  delay: 10
+  timeout: 900
+
+- name: Wait for Linux connection over SSH
+  ansible.builtin.wait_for:
+    port: 22
+    host: "{{ ansible_host }}"
+    delay: 10
+    timeout: 300
+    state: started
+  delegate_to: 127.0.0.1
+
+- name: "Check that server is up and running and ready for deployment"
+  uri:
+    url: "https://dzen.ru/?yredirect=true"
+    status_code: 200
+  register: result
+  until: result.status == 200
+  retries: 60
+  delay: 1
+
+
+# - name: Wait for Windows connection (5986/TCP WinRM over HTTPS)
+#   ansible.builtin.wait_for:
+#     port: 5986
+#     host: "{{ ansible_host }}"
+#     delay: 10
+#     timeout: 300
+#     state: started
+#   delegate_to: 127.0.0.1
+#   when: '"win" in ansible_host'

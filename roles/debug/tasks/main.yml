@@ -2,7 +2,7 @@
 # tasks file for debug
 - name: Debug
   block:
-    - name: Copy and debug
+    - name: Copy_and_debug
       ansible.builtin.template:
         src: templates/tmp.txt.j2
         dest: /tmp/tmp.txt
@@ -19,5 +19,21 @@
       ansible.builtin.debug:
         msg:
           - "{{ ansible_os_family }}"
-          - "{{ tmp['content'] | b64decode}}"
+          - "{{ tmp['content'] | b64decode }}"
   tags: debug
+
+- name: Check_file_1
+  block:
+    - name: Create file
+      ansible.builtin.command: rm /tmp/test.txt
+
+    - name: Check
+      ansible.builtin.command: ls /tmp/test.txt
+      register: result
+
+  rescue:
+    - name: Debug
+      ansible.builtin.debug:
+        var: result
+
+  tags: file
